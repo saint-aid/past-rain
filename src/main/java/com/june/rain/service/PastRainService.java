@@ -36,8 +36,8 @@ public class PastRainService {
                 Elements els = doc.select(".text");
 
                 for (Element el: els) {
-
-                    if(idx > 144) break;
+                    if(idx > 144) break;//총 루프수(하루) 넘으면 중단
+                    
                     PastRainResponseDto dto = new PastRainResponseDto(
                             Rain.builder()
                                     .searchDay(min.substring(0,8))
