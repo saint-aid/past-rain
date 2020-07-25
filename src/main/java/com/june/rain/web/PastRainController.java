@@ -24,20 +24,22 @@ public class PastRainController {
 
     //**조회**//
     @GetMapping("/getRainAll")
-    public ResponseEntity<ResponseMessage> getRainAll (@PathVariable String searchDay){
+    public ResponseEntity<ResponseMessage> getRainAll (
+            //@PathVariable String searchDay
+        ){
         ResponseMessage responseMessage = new ResponseMessage();
         ResponseEntity responseEntity = new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
         try{
-            List<PastRainResponseDto> result = pastRainService.getRainAll(searchDay);
+            List<PastRainResponseDto> result = pastRainService.getRainAll("202007222350");
 
-            //if(result.isEmpty())
-               // responseMessage.setResult(false);
+            if(result.isEmpty())
+                responseMessage.setResult(false);
 
-            //responseMessage.setData(result);
+            responseMessage.setData(result);
         }catch (Exception e){
             e.printStackTrace();
-            //responseMessage.setCode(500);
-            //responseMessage.setResult(false);
+            responseMessage.setCode(500);
+            responseMessage.setResult(false);
         }
 
         return responseEntity;
