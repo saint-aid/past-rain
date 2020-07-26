@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class PastRainController {
    // private final PastRainService pastRainService;
@@ -44,4 +44,6 @@ public class PastRainController {
 
         return responseEntity;
     }
+
+
 }

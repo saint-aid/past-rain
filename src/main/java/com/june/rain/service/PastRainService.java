@@ -30,7 +30,9 @@ public class PastRainService {
                 //System.out.println("min ------- > " + min);
                 //2.==url을 구하고 HTML 정보를 가져온다==/
                 //System.out.println("getUrls(min,city) ---> " +getUrls(min,city));
-                Document doc = Jsoup.connect(getUrls(min,city)).get();
+
+                Document doc = Jsoup.connect(getUrls(min,city))
+                        .header("accept-language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7").get();
 
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
