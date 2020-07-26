@@ -1,5 +1,6 @@
 package com.june.rain.web;
 
+import com.june.rain.domain.Rain;
 import com.june.rain.service.PastRainService;
 import com.june.rain.web.dto.PastRainResponseDto;
 import com.june.rain.web.dto.ResponseMessage;
@@ -8,12 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,14 +23,21 @@ public class PastRainController {
     private final PastRainService pastRainService;
 
     //**조회**//
-    @GetMapping("/getRainAll")
+    @PostMapping("/getRainAll")
     public ResponseEntity<ResponseMessage> getRainAll (
-            //@PathVariable String searchDay
+//            @RequestParam(name = "searchDay", required = true, defaultValue = "") String searchDay,
+//            @RequestParam(name = "city", required = true, defaultValue = "") String city
+            @RequestBody Map paraMap
         ){
         ResponseMessage responseMessage = new ResponseMessage();
         ResponseEntity responseEntity = new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
         try{
-            List<PastRainResponseDto> result = pastRainService.getRainAll("202007222350");
+            String searchDay = (String) paraMap.get("searchDay");
+            String city = (String) paraMap.get("city");
+
+            System.out.println("con searchDay---> " + searchDay);
+            System.out.println("con city---> " + city);
+            List<PastRainResponseDto> result = pastRainService.getRainAll(searchDay,city );
 
             if(result.isEmpty())
                 responseMessage.setResult(false);
@@ -47,8 +54,12 @@ public class PastRainController {
 
     //**엑셀다운로드**//
     @GetMapping("/excelDown")
-    public void excelDown(HttpServletResponse response) throws Exception{
-        pastRainService.excelDown(response, "202007232350");
+    public void excelDown(
+            HttpServletResponse response,
+            @RequestParam(name = "searchDay", required = true, defaultValue = "") String searchDay,
+            @RequestParam(name = "city", required = true, defaultValue = "") String city
+        ) throws Exception{
+        pastRainService.excelDown(response, searchDay, city);
     }
 
 }

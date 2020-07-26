@@ -6,18 +6,39 @@
     <title>Past Rainy API</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />-->
     <script defer src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!--    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>-->
     <script defer src="/js/main.js"></script>
 </head>
+
 <body>
-    <header>
-        <h1>Past Rainy API</h1>
-    </header>
-    <nav>
-        <a href="#" class="btn btn-secondary" role="button" id="btn-search">Search</a>
-        <a href="#" class="btn btn-success active" role="button" id="btn-excel">Excel</a>
-    </nav>
+<header>
+    <h1>Past Rainy API</h1>
+</header>
+<nav>
+    <ul>
+        <li>
+            <select id="city" class="">
+                <option value="273" selected="selected">문경</option>
+                <option value="226" >보은</option>
+                <option value="221" >제천</option>
+            </select>
+        </li>
+        <li>
+            <input type="text" class="" id="calender" placeholder="202007262300">
+        </li>
+        <li>
+            <a href="#" class="btn btn-secondary" role="button" id="btn-search">Search</a>
+        </li>
+        <li>
+            <a href="#" class="btn btn-success active" role="button" id="btn-excel">ExcelDownload</a>
+        </li>
+    </ul>
+</nav>
+<section>
+    <h3 id="subTitle">SubTitle</h3>
     <!-- 목록 출력 영역 -->
     <table class="table table-horizontal table-bordered">
         <thead class="thead-strong">
@@ -34,11 +55,14 @@
         </tr>
         </thead>
         <tbody id="tbody">
-        <tr>
-            데이터가 존재하지 않습니다.
-           <!-- <td name="searchDay">2000-07-23</td>-->
+         <tr>
+            <td colspan="9" style="text-align: center;">데이터가 존재하지 않습니다.</td>
         </tr>
         </tbody>
     </table>
+</section>
+<footer>
+    <span>Rino Mari <em>|</em> Done is Better Than Perfect <em>|</em> </span><span class="">Copyright ⓒ 2020 JUNE Co., Ltd. All Rights Reserved.</span>
+</footer>
 </body>
 </html>

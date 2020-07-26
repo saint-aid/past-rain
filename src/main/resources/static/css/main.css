@@ -1,0 +1,32 @@
+
+
+nav {
+    background-color:lightcoral;
+    display: flex;
+    justify-content: flex-end;
+}
+nav ul{
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    height: 100%;
+    margin:0;
+}
+nav ul li{
+    padding: 5px;
+}
+
+section{
+    padding: 5px;
+}
+section h3{
+    text-align: center;
+}
+
+footer{
+    background-color: lightgray;
+    padding: 15px 0 15px;
+    text-align: center;
+}

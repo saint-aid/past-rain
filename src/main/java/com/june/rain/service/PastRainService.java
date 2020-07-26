@@ -23,13 +23,12 @@ public class PastRainService {
     private static String BaseUrl = "https://www.weather.go.kr/cgi-bin/aws/nph-aws_txt_min_guide_test?";
 
     //**조회데이터를 구해온다**/
-    public List<PastRainResponseDto> getRainAll(String searchDay) {
-        String city = "273";
+    public List<PastRainResponseDto> getRainAll(String searchDay,String city) {
+        //String city = "273";
         List<PastRainResponseDto> rainList = new ArrayList<>(); // 초기화
         try {
             //1.==가공된 시간을 구해온다==//
             String[] days =  getSearchTime(searchDay);
-            System.out.println("days :: " + Arrays.toString(days));
             int idx = 1; //총 루프수(하루)
 
             for(String min : days){
@@ -37,8 +36,7 @@ public class PastRainService {
                 //2.==url을 구하고 HTML 정보를 가져온다==/
                 //System.out.println("getUrls(min,city) ---> " +getUrls(min,city));
 
-                Document doc = Jsoup.connect(getUrls(min,city))
-                        .header("accept-language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7").get();
+                Document doc = Jsoup.connect(getUrls(min,city)).get();
 
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
@@ -111,10 +109,10 @@ public class PastRainService {
     }
 
     //**엑셀다운로드**//
-    public void excelDown(HttpServletResponse response, String saerchDay) {
+    public void excelDown(HttpServletResponse response, String saerchDay, String city) {
 
         //목록조회
-        List<PastRainResponseDto> excelList = getRainAll(saerchDay);
+        List<PastRainResponseDto> excelList = getRainAll(saerchDay, city);
 
         // 워크북 생성
         Workbook wb = new HSSFWorkbook();
