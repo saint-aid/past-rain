@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class PastRainController {
    // private final PastRainService pastRainService;
-
-    @Autowired
-    PastRainService pastRainService;
+    //@Autowired
+    private final PastRainService pastRainService;
 
     //**조회**//
     @GetMapping("/getRainAll")
@@ -45,5 +45,10 @@ public class PastRainController {
         return responseEntity;
     }
 
+    //**엑셀다운로드**//
+    @GetMapping("/excelDown")
+    public void excelDown(HttpServletResponse response) throws Exception{
+        pastRainService.excelDown(response, "202007232350");
+    }
 
 }

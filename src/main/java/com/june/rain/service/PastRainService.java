@@ -3,11 +3,17 @@ package com.june.rain.service;
 import com.june.rain.domain.Rain;
 import com.june.rain.web.dto.PastRainResponseDto;
 import lombok.NoArgsConstructor;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -102,5 +108,127 @@ public class PastRainService {
         String realTime = "&m&K"; //실시간(a)
 
         return BaseUrl + days + standMin + rangeMin + cities + realTime;
+    }
+
+    //**엑셀다운로드**//
+    public void excelDown(HttpServletResponse response, String saerchDay) {
+
+        //목록조회
+        List<PastRainResponseDto> excelList = getRainAll(saerchDay);
+
+        // 워크북 생성
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet("관측자료");
+        Row row = null;
+        Cell cell = null;
+        int rowNo = 0;
+
+        // 테이블 헤더용 스타일
+        CellStyle headStyle = wb.createCellStyle();
+
+        // 가는 경계선을 가집니다.
+        headStyle.setBorderTop(BorderStyle.THIN);
+        headStyle.setBorderBottom(BorderStyle.THIN);
+        headStyle.setBorderLeft(BorderStyle.THIN);
+        headStyle.setBorderRight(BorderStyle.THIN);
+
+        // 배경색은 회색입니다.
+        headStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        // 데이터는 가운데 정렬합니다.
+        headStyle.setAlignment(HorizontalAlignment.CENTER);
+
+
+        // 데이터용 경계 스타일 테두리만 지정
+        CellStyle bodyStyle = wb.createCellStyle();
+        bodyStyle.setBorderTop(BorderStyle.THIN);
+        bodyStyle.setBorderBottom(BorderStyle.THIN);
+        bodyStyle.setBorderLeft(BorderStyle.THIN);
+        bodyStyle.setBorderRight(BorderStyle.THIN);
+
+
+        // 헤더 생성
+        row = sheet.createRow(rowNo++);
+        cell = row.createCell(0);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("조회일");
+        cell = row.createCell(1);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("시:분");
+        cell = row.createCell(2);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("강수");
+        cell = row.createCell(3);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("강수15");
+        cell = row.createCell(4);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("강수60");
+        cell = row.createCell(5);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("강수3H");
+        cell = row.createCell(6);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("강수6H");
+        cell = row.createCell(7);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("강수12H");
+        cell = row.createCell(8);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("일강수");
+        cell = row.createCell(9);
+        cell.setCellStyle(headStyle);
+        cell.setCellValue("기온");
+
+
+        // 데이터 부분 생성
+        for(PastRainResponseDto dto : excelList) {
+            row = sheet.createRow(rowNo++);
+
+            cell = row.createCell(0);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getSearchDay());
+            cell = row.createCell(1);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRainHm());
+            cell = row.createCell(2);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRainYn());
+            cell = row.createCell(3);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRain15m());
+            cell = row.createCell(4);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRain60m());
+            cell = row.createCell(5);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRain3h());
+            cell = row.createCell(6);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRain6h());
+            cell = row.createCell(7);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRain12h());
+            cell = row.createCell(8);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getRain24h());
+            cell = row.createCell(9);
+            cell.setCellStyle(bodyStyle);
+            cell.setCellValue(dto.getTemperature());
+        }
+
+        // 컨텐츠 타입과 파일명 지정
+        response.setContentType("ms-vnd/excel");
+        response.setHeader("Content-Disposition", "attachment;filename=test.xls");
+
+        // 엑셀 출력
+        try {
+            wb.write(response.getOutputStream());
+            wb.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 }

@@ -6,6 +6,10 @@ const main = {
         document.querySelector('#btn-search').addEventListener('click',()=>{
             this.search();
         });
+        document.querySelector('#btn-excel').addEventListener('click',()=>{
+            if(!confirm("엑셀다운로드를 시작합니다.\n계속하시겠습니까?")) return;
+            location.href = "/excelDown";
+        });
     },
     search : function () {
         const data = {
