@@ -1,7 +1,7 @@
 
 
 nav {
-    background-color:lightcoral;
+    background-color: #f08080;
     display: flex;
     justify-content: flex-end;
 }
@@ -29,4 +29,17 @@ footer{
     background-color: lightgray;
     padding: 15px 0 15px;
     text-align: center;
+}
+
+.m_bg {
+    display: none;
+    position:absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height:100%;
+    background:#000;
+    opacity:.6;
+    filter:alpha(opacity=60);
+    z-index:100;
 }
