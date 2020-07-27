@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -23,27 +24,35 @@ public class PastRainService {
     private static String BaseUrl = "https://www.weather.go.kr/cgi-bin/aws/nph-aws_txt_min_guide_test?";
 
     //**조회데이터를 구해온다**/
-    public List<PastRainResponseDto> getRainAll(String searchDay,String city) {
+    public List<PastRainResponseDto> getRainAll(String searchStDay, String searchEdDay,String city) {
         //String city = "273";
         List<PastRainResponseDto> rainList = new ArrayList<>(); // 초기화
         try {
             //1.==가공된 시간을 구해온다==//
-            String[] days =  getSearchTime(searchDay);
-            int idx = 1; //총 루프수(하루)
-
+            String[] days =  getSearchTime(searchStDay, searchEdDay);
+            int idx = 1; //총 루프수()
             for(String min : days){
                 //System.out.println("min ------- > " + min);
                 //2.==url을 구하고 HTML 정보를 가져온다==/
                 //System.out.println("getUrls(min,city) ---> " +getUrls(min,city));
-
                 Document doc = Jsoup.connect(getUrls(min,city)).get();
-
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
 
                 for (Element el: els) {
-                    if(idx > 144) break;//총 루프수(하루) 넘으면 중단
-                    
+                    if(idx == days.length ){
+                       //--break 문을 사용하기 위한 날짜변환 +10분 --//
+                        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+                        Date endTime = format.parse(searchEdDay);
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(endTime);
+                        cal.add(Calendar.MINUTE, -10);
+
+                        String hhmm = format.format(cal.getTime()).substring(8);
+                        String hhmm2 = el.children().get(0).text().replace(":","");
+
+                        if(hhmm.equals(hhmm2)) break; //총 루프수(하루) 넘으면 중단
+                    }
                     PastRainResponseDto dto = new PastRainResponseDto(
                             Rain.builder()
                                     .searchDay(min.substring(0,8))
@@ -59,12 +68,11 @@ public class PastRainService {
                                     .build()
                     );
                     rainList.add(dto); //list에 넣기
-
-                    idx++;//총 루프수(하루)
                 }
+                idx++;//총 배열 수
             }
 
-            System.out.println("======rainList======= : " + rainList.toString());
+            //System.out.println("======rainList======= : " + rainList.toString());
             System.out.println("======size:rainList:size======= : " + rainList.size());
 
         }catch (Exception e){
@@ -74,23 +82,29 @@ public class PastRainService {
     }
 
     //==시간을 구한다==//
-    private String[] getSearchTime(String nextMinute) {
+    public String[] getSearchTime(String searchStDay, String searchEdDay) throws Exception {
         //1)날짜에 따라 하루 데이터 가져오기 html parsing
             //1-1) 10분 데이터 시 조회 날짜 한페이지에 61개. 필요한 데이터 144. 하루는 3번(2.3번) 루프
             //1-2) 시간 10분 시 조회 날짜 컨버팅
-        //nextMinute = "202007232350";
+        //String transStDay = searchStDay.substring(0,8);
+        //String transEdDay = searchEdDay.substring(0,8);
         SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddHHmm");
+        Date d1 = fm.parse(searchStDay);
+        Date d2 = fm.parse(searchEdDay);
+        long diffDay = (d1.getTime() - d2.getTime())/(24*60*60*1000);
+        int loopDt = Math.round((diffDay*144)/61)+ 1; //루프수 구하기
+
         Calendar cal = Calendar.getInstance();
-        String[] minuteList = new String[3];
+        String minuteList[] = new String[loopDt];
         try {
             for(int i=0; i<minuteList.length; i++){
-                Date date = fm.parse(nextMinute);
+                Date date = fm.parse(searchStDay);
                 cal.setTime(date);
                 cal.add(Calendar.MINUTE, -(i*610));
                 minuteList[i] = fm.format(cal.getTime());
                 cal.clear();
             }
-           // System.out.println(Arrays.toString(minuteList));
+           System.out.println(Arrays.toString(minuteList));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,7 +112,7 @@ public class PastRainService {
     }
     
     //==URL을 구해온다==//
-    private String getUrls(String days, String city) {
+    public String getUrls(String days, String city) {
         //String date = "&"+days; //서칭 날짜
         String standMin = "&0"; //서칭된 값의 기준
         String rangeMin = "&MINDB_10M"; //10분단위
@@ -109,10 +123,10 @@ public class PastRainService {
     }
 
     //**엑셀다운로드**//
-    public void excelDown(HttpServletResponse response, String saerchDay, String city) {
+    public void excelDown(HttpServletResponse response, String searchStDay,String searchEdDay,String city) throws Exception {
 
         //목록조회
-        List<PastRainResponseDto> excelList = getRainAll(saerchDay, city);
+        List<PastRainResponseDto> excelList = getRainAll(searchStDay, searchEdDay,city);
 
         // 워크북 생성
         Workbook wb = new HSSFWorkbook();
@@ -218,15 +232,15 @@ public class PastRainService {
 
         // 컨텐츠 타입과 파일명 지정
         response.setContentType("ms-vnd/excel");
-        response.setHeader("Content-Disposition", "attachment;filename=test.xls");
+        response.setHeader("Content-Disposition", "attachment;filename=rain.xls");
 
         // 엑셀 출력
         try {
             wb.write(response.getOutputStream());
-            wb.close();
         } catch (IOException e) {
             e.printStackTrace();
-
+        }finally {
+            wb.close();
         }
     }
 }

@@ -38,3 +38,4 @@ dependencies {
     testAnnotationProcessor('org.projectlombok:lombok')
     testCompile('org.assertj:assertj-core:3.12.2')
 }
+

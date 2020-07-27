@@ -18,26 +18,27 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 public class PastRainController {
-   // private final PastRainService pastRainService;
-    //@Autowired
     private final PastRainService pastRainService;
 
     //**조회**//
     @PostMapping("/getRainAll")
     public ResponseEntity<ResponseMessage> getRainAll (
-//            @RequestParam(name = "searchDay", required = true, defaultValue = "") String searchDay,
-//            @RequestParam(name = "city", required = true, defaultValue = "") String city
+            //@RequestParam("searchDay") String searchDay,
+            //@RequestParam("city") String city
             @RequestBody Map paraMap
         ){
         ResponseMessage responseMessage = new ResponseMessage();
         ResponseEntity responseEntity = new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
         try{
-            String searchDay = (String) paraMap.get("searchDay");
+            String searchStDay = (String) paraMap.get("searchStDay");
+            String searchEdDay = (String) paraMap.get("searchEdDay");
             String city = (String) paraMap.get("city");
 
-            System.out.println("con searchDay---> " + searchDay);
-            System.out.println("con city---> " + city);
-            List<PastRainResponseDto> result = pastRainService.getRainAll(searchDay,city );
+//            String searchStDay = "202007250000";
+//            String searchEdDay = "202007222330";
+//            String city = "273";
+
+            List<PastRainResponseDto> result = pastRainService.getRainAll(searchStDay,searchEdDay,city );
 
             if(result.isEmpty())
                 responseMessage.setResult(false);
@@ -53,13 +54,21 @@ public class PastRainController {
     }
 
     //**엑셀다운로드**//
-    @GetMapping("/excelDown")
+    @PostMapping("/excelDown")
     public void excelDown(
             HttpServletResponse response,
-            @RequestParam(name = "searchDay", required = true, defaultValue = "") String searchDay,
-            @RequestParam(name = "city", required = true, defaultValue = "") String city
+//            @PathVariable String cntIdn,
+//            @PathVariable String cntIdn
+            @RequestBody Map paraMap
         ) throws Exception{
-        pastRainService.excelDown(response, searchDay, city);
+            String searchStDay = (String) paraMap.get("searchStDay");
+            String searchEdDay = (String) paraMap.get("searchEdDay");
+            String city = (String) paraMap.get("city");
+         try{
+            pastRainService.excelDown(response, searchStDay,searchEdDay, city);
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
     }
 
 }

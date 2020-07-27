@@ -26,24 +26,35 @@ public class PastRainServiceTest {
 
 
     @Test
-    public void 시간을_가공한다() {
+    public void 시간을_가공한다() throws ParseException {
         //1)날짜에 따라 하루 데이터 가져오기 html parsing
-        //1-1) 10분 데이터 시 조회날짜 한페이지에 61개. 필요한 데이터 144. 하루는 3번(2.3번) 루프
-        //1-2) 시간 10분 시 조회날짜 컨버팅 필요
-        String nextMinute = "202007232350";
+        //1-1) 10분 데이터 시 조회 날짜 한페이지에 61개. 필요한 데이터 144. 하루는 3번(2.3번) 루프
+        //1-2) 시간 10분 시 조회 날짜 컨버팅
+        String searchStDay = "202007250000";
+        String searchEdDay = "202007220130";
         SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddHHmm");
+        Date d1 = fm.parse(searchStDay);
+        Date d2 = fm.parse(searchEdDay);
+        long diffDay = (d1.getTime() - d2.getTime())/(24*60*60*1000);
+
+        System.out.println("타임 0-1 --> " + d1.getTime() /(24*60*60*1000) );
+        System.out.println("타임 0-2 --> " + d2.getTime() /(24*60*60*1000) );
+        System.out.println("타임 1--> " + (d1.getTime() - d2.getTime())/(24*60*60*1000) );
+        System.out.println("타임 2--> " + (d1.getTime() - d2.getTime())/(60*60*1000) );
+        System.out.println("타임 3--> " + (d1.getTime() - d2.getTime())/(60*1000) );
+        int loopDt = Math.round((diffDay*144)/61) + 1; //루프수 구하기
+
         Calendar cal = Calendar.getInstance();
-        String[] minuteList = new String[3];
+        String minuteList[] = new String[loopDt];
         try {
             for(int i=0; i<minuteList.length; i++){
-                Date date = fm.parse(nextMinute);
+                Date date = fm.parse(searchStDay);
                 cal.setTime(date);
                 cal.add(Calendar.MINUTE, -(i*610));
                 minuteList[i] = fm.format(cal.getTime());
                 cal.clear();
             }
             System.out.println(Arrays.toString(minuteList));
-
         } catch (Exception e) {
             e.printStackTrace();
         }

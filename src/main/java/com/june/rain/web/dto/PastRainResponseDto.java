@@ -47,20 +47,20 @@ public class PastRainResponseDto {
         this.temperature = entity.getTemperature();
     }
 
-    @Override
-    public String toString() {
-        return "PastRainResponseDto{" +
-                "searchDay='" + searchDay + '\'' +
-                ", rainHm='" + rainHm + '\'' +
-                ", rainYn='" + rainYn + '\'' +
-                ", rain15m='" + rain15m + '\'' +
-                ", rain60m='" + rain60m + '\'' +
-                ", rain3h='" + rain3h + '\'' +
-                ", rain6h='" + rain6h + '\'' +
-                ", rain12h='" + rain12h + '\'' +
-                ", rain24h='" + rain24h + '\'' +
-                ", temperature='" + temperature + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "PastRainResponseDto{" +
+//                "searchDay='" + searchDay + '\'' +
+//                ", rainHm='" + rainHm + '\'' +
+//                ", rainYn='" + rainYn + '\'' +
+//                ", rain15m='" + rain15m + '\'' +
+//                ", rain60m='" + rain60m + '\'' +
+//                ", rain3h='" + rain3h + '\'' +
+//                ", rain6h='" + rain6h + '\'' +
+//                ", rain12h='" + rain12h + '\'' +
+//                ", rain24h='" + rain24h + '\'' +
+//                ", temperature='" + temperature + '\'' +
+//                '}';
+//    }
 }
 
