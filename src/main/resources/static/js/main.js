@@ -1,6 +1,7 @@
 `use strict`
 
 const main = {
+
     init : function(){
         document.querySelector('#btn-search').addEventListener('click',()=>{
             this.search();
