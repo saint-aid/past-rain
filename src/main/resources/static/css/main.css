@@ -34,16 +34,7 @@ section h3{
     text-align: center;
 }
 
-/*section table{
-    overflow-y:auto;
-    overflow-x:hidden;
-    height:calc(100% - 40px);
-}*/
-
 footer{
-    /*position:a;*/
-    /*bottom:0;*/
-    /*width:100%;*/
     background-color: lightgray;
     padding: 15px 0 15px;
     text-align: center;
