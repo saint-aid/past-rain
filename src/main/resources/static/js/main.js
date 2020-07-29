@@ -1,7 +1,6 @@
 `use strict`
 
 const main = {
-
     init : function(){
         document.querySelector('#btn-search').addEventListener('click',()=>{
             this.search();
@@ -9,9 +8,6 @@ const main = {
         document.querySelector('#btn-excel').addEventListener('click',()=>{
             this.excelDownload();
         });
-        // $('#datetimepicker2').datetimepicker({
-        //     locale: 'ru'
-        // });
     },
     search : function () {
         const param = {
@@ -54,6 +50,7 @@ const main = {
     excelDownload : () => {
         if(!confirm("엑셀다운로드를 시작합니다.\n계속하시겠습니까?")) return;
         $(".m_bg").show(); //배경 //jQuery 걷어내기
+        $(".loadingImg").show(); //배경 //jQuery 걷어내기
         const paraMap = {
             city :  document.querySelector('#city').value,
             searchStDay : document.querySelector('#searchStDay').value ,
@@ -68,12 +65,13 @@ const main = {
         .then(response => response.blob())
         .then(_data => {
             $(".m_bg").hide(); //배경 //jQuery 걷어내기
+            $(".loadingImg").hide(); //배경 //jQuery 걷어내기
             console.log(_data);
             const _blob = new Blob([_data], {type: 'ms-vnd/excel'});
             //--가상다운--//
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(_blob);
-            link.download = 'text.xls';
+            link.download = 'rainy_excel.xls';
             link.click();
         })
     },
