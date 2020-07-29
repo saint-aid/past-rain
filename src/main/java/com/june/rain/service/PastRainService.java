@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,27 +35,26 @@ public class PastRainService {
             for(String min : days){
                 //System.out.println("min ------- > " + min);
                 //2.==url을 구하고 HTML 정보를 가져온다==/
-                //System.out.println("getUrls(min,city) ---> " +getUrls(min,city));
-                Document doc = Jsoup.connect(getUrls(min,city)).get();
+                //인코딩 문제로 parsing 가져옴
+                Document doc = Jsoup.parse(new URL(getUrls(min,city)).openStream(), "euc-kr", getUrls(min,city));
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
-
                 for (Element el: els) {
-                    if(idx == days.length ){
-                       //--break 문을 사용하기 위한 날짜변환 +10분 --//
+                    if(idx == days.length ){ //마지막 배열 중 end 시간과 같으면 break
+                        //--break 문을 사용하기 위한 날짜변환 -10분 --//
                         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
                         Date endTime = format.parse(searchEdDay);
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(endTime);
-                        cal.add(Calendar.MINUTE, -10);
+                        cal.add(Calendar.MINUTE, -10); //해당시간에 break 되기 때문에 전 시간과 비교
 
                         String hhmm = format.format(cal.getTime()).substring(8);
                         String hhmm2 = el.children().get(0).text().replace(":","");
 
-                        if(hhmm.equals(hhmm2)) break; //총 루프수(하루) 넘으면 중단
+                        if(hhmm.equals(hhmm2)) break; //총 루프수 넘으면 중단
                     }
                     PastRainResponseDto dto = new PastRainResponseDto(
-                            Rain.builder()
+                            Rain.builder() //setter 없음
                                     .searchDay(min.substring(0,8))
                                     .rainHm(el.children().get(0).text())
                                     .rainYn(el.children().get(1).text())
@@ -71,7 +71,6 @@ public class PastRainService {
                 }
                 idx++;//총 배열 수
             }
-
             //System.out.println("======rainList======= : " + rainList.toString());
             System.out.println("======size:rainList:size======= : " + rainList.size());
 

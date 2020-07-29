@@ -20,6 +20,8 @@ const main = {
             searchEdDay : document.querySelector('#searchEdDay').value ,
         };
         $(".m_bg").show(); //배경 //jQuery 걷어내기
+        $(".loadingImg").show(); //배경 //jQuery 걷어내기
+
         fetch('/getRainAll', {
           method: 'POST',
           body: JSON.stringify(param),
@@ -28,6 +30,7 @@ const main = {
         .then(response => response.json()) //json 객체로 반환
         .then( result => {
             $(".m_bg").hide(); //배경 //jQuery 걷어내기
+            $(".loadingImg").hide(); //배경 //jQuery 걷어내기
             const list = result.data;
             document.querySelector('#tbody tr').remove();
             let html ="";

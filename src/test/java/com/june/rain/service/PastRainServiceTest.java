@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -66,6 +67,7 @@ public class PastRainServiceTest {
         String searchDay = "20200723000000";
         String city = "273";
         Document doc = Jsoup.connect(url+searchDay+"&0&MINDB_10M&"+city+"&m&K").get();
+
         //2)개체 정보 가져오기(tr 객체를 가져온다 61개)
         Elements els = doc.select(".text");
         List<PastRainResponseDto> rainList = new ArrayList<>();
@@ -92,8 +94,18 @@ public class PastRainServiceTest {
 
     }
 
-//    @Test
-//    public void 가져온_HTML데이터를_가공한다(){
-//
-//    }
+    @Test
+    public void HTML데이터를_인코딩후_가져온다() throws IOException {
+        String baseUrl = "https://www.weather.go.kr/cgi-bin/aws/nph-aws_txt_min_guide_test?";
+        String searchDay = "20200723000000";
+        String city = "273";
+        String urls = baseUrl+ searchDay + "&0&MINDB_10M&" + city + "&m&K";
+        Document doc =  Jsoup.parse(new URL(urls).openStream(), "euc-kr", urls);
+
+
+        System.out.println("==========================================================");
+        System.out.println(doc.toString());
+        System.out.println("==========================================================");
+
+    }
 }

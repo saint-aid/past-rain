@@ -1,5 +1,14 @@
 
-
+.header_logo{
+  color:black;
+  font-size: 28px;
+  font-weight:bold;
+  padding:5px;
+}
+.header_logo a{
+  text-decoration:none;
+  color:#646464;
+}
 nav {
     background-color: #f08080;
     display: flex;
@@ -25,10 +34,20 @@ section h3{
     text-align: center;
 }
 
+/*section table{
+    overflow-y:auto;
+    overflow-x:hidden;
+    height:calc(100% - 40px);
+}*/
+
 footer{
+    /*position:a;*/
+    /*bottom:0;*/
+    /*width:100%;*/
     background-color: lightgray;
     padding: 15px 0 15px;
     text-align: center;
+
 }
 
 .m_bg {
@@ -41,5 +60,10 @@ footer{
     background:#000;
     opacity:.6;
     filter:alpha(opacity=60);
+}
+
+.loadingImg{
+    display: none;
+    text-align:center;
     z-index:100;
 }
