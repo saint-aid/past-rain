@@ -17,6 +17,4 @@ public class ResponseMessage {
 	private boolean result = true;
 	//데이터
 	private Object data;
-
-
 }
