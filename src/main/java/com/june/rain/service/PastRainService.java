@@ -27,17 +27,16 @@ public class PastRainService {
 
     //**조회데이터를 구해온다**/
     public List<PastRainResponseDto> getRainAll(String searchStDay, String searchEdDay,String city) {
-        //String city = "273";
         List<PastRainResponseDto> rainList = new ArrayList<>(); // 초기화
         try {
             //1.==가공된 시간을 구해온다==//
             String[] days =  getSearchTime(searchStDay, searchEdDay);
             int idx = 1; //총 루프수()
             for(String min : days){
-                //System.out.println("min ------- > " + min);
                 //2.==url을 구하고 HTML 정보를 가져온다==/
                 //인코딩 문제로 parsing 가져옴
                 Document doc = Jsoup.parse(new URL(getUrls(min,city)).openStream(), "euc-kr", getUrls(min,city));
+
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
                 for (Element el: els) {
@@ -73,7 +72,7 @@ public class PastRainService {
                 idx++;//총 배열 수
             }
             //System.out.println("======rainList======= : " + rainList.toString());
-            System.out.println("======size:rainList:size======= : " + rainList.size());
+            //System.out.println("======size:rainList:size======= : " + rainList.size());
 
         }catch (Exception e){
             e.printStackTrace();
@@ -81,30 +80,28 @@ public class PastRainService {
         return rainList;
     }
 
-    //==시간을 구한다==//
+    //==총 배열 시간을 구한다==//
     public String[] getSearchTime(String searchStDay, String searchEdDay) throws Exception {
         //1)날짜에 따라 하루 데이터 가져오기 html parsing
             //1-1) 10분 데이터 시 조회 날짜 한페이지에 61개. 필요한 데이터 144. 하루는 3번(2.3번) 루프
             //1-2) 시간 10분 시 조회 날짜 컨버팅
-        //String transStDay = searchStDay.substring(0,8);
-        //String transEdDay = searchEdDay.substring(0,8);
         SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddHHmm");
         Date d1 = fm.parse(searchStDay);
         Date d2 = fm.parse(searchEdDay);
-        long diffDay = (d1.getTime() - d2.getTime())/(24*60*60*1000);
+        long diffDay = (d1.getTime() - d2.getTime())/(24*60*60*1000); // 해당일 구하기
         int loopDt = Math.round((diffDay*144)/61)+ 1; //루프수 구하기
 
         Calendar cal = Calendar.getInstance();
-        String minuteList[] = new String[loopDt];
+        String minuteList[] = new String[loopDt];//시간을 루프에 쓸 배열을 생성
         try {
             for(int i=0; i<minuteList.length; i++){
-                Date date = fm.parse(searchStDay);
+                Date date = fm.parse(searchStDay);//기준날짜
                 cal.setTime(date);
-                cal.add(Calendar.MINUTE, -(i*610));
+                cal.add(Calendar.MINUTE, -(i*610));//다음페이는 610분 필요
                 minuteList[i] = fm.format(cal.getTime());
                 cal.clear();
             }
-           System.out.println(Arrays.toString(minuteList));
+           //System.out.println(Arrays.toString(minuteList));
         } catch (Exception e) {
             e.printStackTrace();
         }

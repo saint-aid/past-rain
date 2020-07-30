@@ -67,9 +67,11 @@ public class PastRainServiceTest {
         String searchDay = "20200723000000";
         String city = "273";
         Document doc = Jsoup.connect(url+searchDay+"&0&MINDB_10M&"+city+"&m&K").get();
-
+        System.out.println("==========doc======= " + doc);
         //2)개체 정보 가져오기(tr 객체를 가져온다 61개)
         Elements els = doc.select(".text");
+
+        System.out.println("==========els======= " + els);
         List<PastRainResponseDto> rainList = new ArrayList<>();
         for (Element el: els) {
             PastRainResponseDto dto = new PastRainResponseDto(
@@ -90,7 +92,7 @@ public class PastRainServiceTest {
             rainList.add(dto);
             System.out.println("==============================================================\n\n");
         }
-        System.out.println("======rainList======= : " + rainList.toString());
+       // System.out.println("======rainList======= : " + rainList.toString());
 
     }
 
@@ -102,9 +104,24 @@ public class PastRainServiceTest {
         String urls = baseUrl+ searchDay + "&0&MINDB_10M&" + city + "&m&K";
         Document doc =  Jsoup.parse(new URL(urls).openStream(), "euc-kr", urls);
 
-
         System.out.println("==========================================================");
         System.out.println(doc.toString());
+        System.out.println("==========================================================");
+        System.out.println(doc.toString());
+
+    }
+
+    @Test
+    public void HTML데이터를_인코딩후_셀렉터값을_가져온다() throws IOException {
+        String baseUrl = "https://www.weather.go.kr/cgi-bin/aws/nph-aws_txt_min_guide_test?";
+        String searchDay = "20200723000000";
+        String city = "273";
+        String urls = baseUrl+ searchDay + "&0&MINDB_10M&" + city + "&m&K";
+        Document doc =  Jsoup.parse(new URL(urls).openStream(), "euc-kr", urls);
+        Elements els = doc.select(".text");
+
+        System.out.println("==========================================================");
+        System.out.println(els);
         System.out.println("==========================================================");
 
     }
