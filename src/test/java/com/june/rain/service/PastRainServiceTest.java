@@ -70,13 +70,17 @@ public class PastRainServiceTest {
         System.out.println("==========doc======= " + doc);
         //2)개체 정보 가져오기(tr 객체를 가져온다 61개)
         Elements els = doc.select(".text");
-
-        System.out.println("==========els======= " + els);
+        //System.out.println("==========els======= " + els);
         List<PastRainResponseDto> rainList = new ArrayList<>();
         for (Element el: els) {
+            String dt = el.child(0).child(0).attr("href");// 날짜 변수값 찾기
+            int indexDt = dt.indexOf(","); //반환 인덱스
+            String searchDays = dt.substring(indexDt +1,indexDt+9); // 날짜값 세팅
+            System.out.println("==== "+dt + " ====");
+            System.out.println("1==== "+dt.substring(indexDt +1,indexDt+9) + " ====1");
             PastRainResponseDto dto = new PastRainResponseDto(
                     Rain.builder()
-                            .searchDay("20200723000000")
+                            .searchDay(searchDays)
                             .rainHm(el.children().get(0).text())
                             .rainYn(el.children().get(1).text())
                             .rain15m(el.children().get(2).text())
@@ -90,9 +94,9 @@ public class PastRainServiceTest {
             );
             //list에 넣기
             rainList.add(dto);
-            System.out.println("==============================================================\n\n");
+            //System.out.println("==============================================================\n\n");
         }
-       // System.out.println("======rainList======= : " + rainList.toString());
+        System.out.println("======rainList======= : " + rainList.toString());
 
     }
 

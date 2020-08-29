@@ -40,6 +40,7 @@ public class PastRainService {
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
                 for (Element el: els) {
+
                     if(idx == days.length ){ //마지막 배열 중 end 시간과 같으면 break
                         //--break 문을 사용하기 위한 날짜변환 -10분 --//
                         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
@@ -53,9 +54,13 @@ public class PastRainService {
 
                         if(hhmm.equals(hhmm2)) break; //총 루프수 넘으면 중단
                     }
+                    String dt = el.child(0).child(0).attr("href");// 날짜 변수값 찾기
+                    int indexDt = dt.indexOf(","); //반환 인덱스
+                    String searchDays = dt.substring(indexDt +1,indexDt+9); // 날짜값 세팅
+
                     PastRainResponseDto dto = new PastRainResponseDto(
                             Rain.builder() //setter 없음
-                                    .searchDay(min.substring(0,8))
+                                    .searchDay(searchDays)
                                     .rainHm(el.children().get(0).text())
                                     .rainYn(el.children().get(1).text())
                                     .rain15m(el.children().get(2).text())
