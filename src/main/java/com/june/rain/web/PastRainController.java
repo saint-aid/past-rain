@@ -23,8 +23,6 @@ public class PastRainController {
     //**조회**//
     @PostMapping("/getRainAll")
     public ResponseEntity<ResponseMessage> getRainAll (
-            //@RequestParam("searchDay") String searchDay,
-            //@RequestParam("city") String city
             @RequestBody Map paraMap
         ){
         ResponseMessage responseMessage = new ResponseMessage();
@@ -33,10 +31,6 @@ public class PastRainController {
             String searchStDay = (String) paraMap.get("searchStDay");
             String searchEdDay = (String) paraMap.get("searchEdDay");
             String city = (String) paraMap.get("city");
-
-//            String searchStDay = "202007250000";
-//            String searchEdDay = "202007222330";
-//            String city = "273";
 
             List<PastRainResponseDto> result = pastRainService.getRainAll(searchStDay,searchEdDay,city );
 
@@ -57,8 +51,6 @@ public class PastRainController {
     @PostMapping("/excelDown")
     public void excelDown(
             HttpServletResponse response,
-//            @PathVariable String cntIdn,
-//            @PathVariable String cntIdn
             @RequestBody Map paraMap
         ) throws Exception{
             String searchStDay = (String) paraMap.get("searchStDay");
