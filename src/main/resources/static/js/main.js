@@ -66,7 +66,7 @@ const main = {
         .then(_data => {
             $(".m_bg").hide(); //배경 //jQuery 걷어내기
             $(".loadingImg").hide(); //배경 //jQuery 걷어내기
-            console.log(_data);
+            //console.log(_data);
             const _blob = new Blob([_data], {type: 'ms-vnd/excel'});
             //--가상다운--//
             const link = document.createElement('a');
@@ -74,6 +74,7 @@ const main = {
             link.download = 'rainy_excel.xls';
             link.click();
         })
+        .catch(error => console.error(error));
     },
 };
 
