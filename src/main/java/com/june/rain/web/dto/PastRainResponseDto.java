@@ -26,6 +26,8 @@ public class PastRainResponseDto {
     private String rain24h;
     //==기온==//
     private String temperature;
+    //==subTitle==//
+    private String subTitle;
     //==풍향1==//
     //==풍향1-1==//
     //==풍속==//
@@ -33,6 +35,11 @@ public class PastRainResponseDto {
     //==풍속10-1==//
     //==습도==//
     //==해면기압==//
+
+    //==subTitle setting==//
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
 
     public PastRainResponseDto(Rain entity) {
         this.searchDay = entity.getSearchDay();
@@ -47,20 +54,5 @@ public class PastRainResponseDto {
         this.temperature = entity.getTemperature();
     }
 
-    @Override
-    public String toString() {
-        return "PastRainResponseDto{" +
-                "searchDay='" + searchDay + '\'' +
-                ", rainHm='" + rainHm + '\'' +
-                ", rainYn='" + rainYn + '\'' +
-                ", rain15m='" + rain15m + '\'' +
-                ", rain60m='" + rain60m + '\'' +
-                ", rain3h='" + rain3h + '\'' +
-                ", rain6h='" + rain6h + '\'' +
-                ", rain12h='" + rain12h + '\'' +
-                ", rain24h='" + rain24h + '\'' +
-                ", temperature='" + temperature + '\'' +
-                '}';
-    }
 }
 

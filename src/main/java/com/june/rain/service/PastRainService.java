@@ -39,6 +39,8 @@ public class PastRainService {
 
                 //3)개체 정보 가져오기(tr 객체를 가져온다 61개)
                 Elements els = doc.select(".text");
+                Elements elsTitle = doc.select(".regs"); //title
+                String subTitle = elsTitle.text();
                 for (Element el: els) {
 
                     if(idx == days.length ){ //마지막 배열 중 end 시간과 같으면 break
@@ -72,6 +74,7 @@ public class PastRainService {
                                     .temperature(el.children().get(8).text())
                                     .build()
                     );
+                    dto.setSubTitle(subTitle);// subTitle stting
                     rainList.add(dto); //list에 넣기
                 }
                 idx++;//총 배열 수

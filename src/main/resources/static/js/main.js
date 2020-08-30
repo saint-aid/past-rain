@@ -28,6 +28,11 @@ const main = {
             $(".m_bg").hide(); //배경 //jQuery 걷어내기
             $(".loadingImg").hide(); //배경 //jQuery 걷어내기
             const list = result.data;
+
+            let subTitle = list[0].subTitle;
+            console.log('subtitle ---', document.querySelector('#subTitle'));
+            document.querySelector('#subTitle').innerHTML = subTitle;
+
             document.querySelector('#tbody tr').remove();
             let html ="";
             for(let i in list){

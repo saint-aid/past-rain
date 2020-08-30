@@ -121,9 +121,10 @@ public class PastRainServiceTest {
         String urls = baseUrl+ searchDay + "&0&MINDB_10M&" + city + "&m&K";
         Document doc =  Jsoup.parse(new URL(urls).openStream(), "euc-kr", urls);
         Elements els = doc.select(".text");
-
+        Elements elsTitle = doc.select(".regs");
+        String title = elsTitle.text();
         System.out.println("==========================================================");
-        System.out.println(els);
+        System.out.println(title);
         System.out.println("==========================================================");
 
     }
